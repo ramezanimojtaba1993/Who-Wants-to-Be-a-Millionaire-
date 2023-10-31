@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { QuestionService } from './question.service';
-import { Answer, QuestionSheet } from 'src/app/model/question.model';
+import { GameService } from './game.service';
+import { Answer, GameStates, QuestionSheet } from 'src/app/model/question.model';
+import { StorageService } from 'src/app/services/storage.service';
 
 declare const bootstrap: any;
 @Component({
@@ -19,6 +20,7 @@ export class GamePageComponent implements OnInit {
 
   isGameStarted = false;
   isGameFinished = false;
+  hasGameUnFinished = false;
 
   questionSheet: QuestionSheet[] = [];
 
@@ -27,23 +29,40 @@ export class GamePageComponent implements OnInit {
 	message: string;
   achievedScore = 0;
 
-	constructor(private questionService: QuestionService) {}
+  constructor(private gameService: GameService, private storageService: StorageService) {}
 
-	ngOnInit() {
-		this.getData();
-	}
+  ngOnInit() {
+    this.getGameState();
+  }
+
+  async getGameState() {
+    const { userId } = this.storageService.getItem('userinfo');
+    const response: GameStates = await this.gameService.getGameState(userId);
+
+    if (response) {
+      this.questionSheet = response.questionSheet;
+      this.currentIndex = response.currentQuestionId;
+      this.hasGameUnFinished = true;
+    } else {
+      this.initializeGame();
+    }
+
+  }
 
 	async next() {
 		if (this.isAllowedToNext()) {
+      // این مدت پایینیا رو دگه کال نکن باگ خیز میشه چون خود شیت دیزییبل و کلیک و اینا رو داره باس
+      // تشخیض بدی اگه کش بو اینا کال نشه
       this.currentQuestion.loading = true;
-      await this.getCorrectAnswer(this.currentQuestion.id);
+      await this.calcAchievedScore(this.currentQuestion.id);
       this.currentQuestion.loading = false;
       this.disabledAllAnswers(this.currentQuestion.id);
 
-      const goNext = () => {
+      const goNext = async () => {
         this.carousel.next();
         this.currentIndex++;
-        this.setCurrentQuestion();
+        await this.updateGameStates();
+        await this.setCurrentQuestion();
       }
 
       if (!this.currentQuestion.isSeen) {
@@ -103,25 +122,42 @@ export class GamePageComponent implements OnInit {
 
 	}
 
-	private getData(): void {
-		this.questionService.getAll().subscribe({
-      complete: () => {},
-      error: () => {
-        alert('something was wrong');
-      },
-      next: (res: any) => {
-        this.questionSheet = res;
-        this.setCurrentQuestion();
-      }
-		});
-	}
+  private async initializeGame() {
+    const questionSheet = await this.gameService.getQuestionsSheet();
+    if (questionSheet) {
+      this.questionSheet = questionSheet;
+    }
 
-  setCurrentQuestion(): void {
+    this.setCurrentQuestion();
+
+    const { userId } = this.storageService.getItem('userinfo');
+    const body: GameStates = {
+      id: userId,
+      userId,
+      currentQuestionId: this.currentQuestion.id,
+      questionSheet: questionSheet
+    }
+
+    await this.gameService.createGameStates(body);
+  }
+
+  async setCurrentQuestion() {
     if (this.currentIndex < this.questionSheet.length) {
       this.currentQuestion = this.questionSheet[this.currentIndex];
     } else if (this.currentIndex === this.questionSheet.length) {
       this.finishGame();
     }
+  }
+
+  async updateGameStates() {
+    const { userId } = this.storageService.getItem('userinfo');
+    const body: GameStates = {
+      id: userId,
+      userId,
+      currentQuestionId: this.currentQuestion.id,
+      questionSheet: this.questionSheet
+    }
+    await this.gameService.updateGameStates(userId, body);
   }
 
   finishGame() {
@@ -134,8 +170,8 @@ export class GamePageComponent implements OnInit {
     this.achievedScore = 0;
   }
 
-  private async getCorrectAnswer(questionId: number) {
-    const response: Answer = await this.questionService.getCorrectAnswer(questionId);
+  private async calcAchievedScore(questionId: number) {
+    const response: Answer = await this.gameService.getCorrectAnswer(questionId);
     const thisQuestion = this.questionSheet.find(question => question.id === questionId);
     const answers = thisQuestion.answers;
     const correctAnswersId = response.correctAnswersId;
@@ -167,13 +203,18 @@ export class GamePageComponent implements OnInit {
 
   public startGame(): void {
     this.isGameStarted = true;
-    this.isGameFinished = false;
+    // this.isGameFinished = false;
   }
 
-  public startGameAgain(): void {
-    this.getData();
+  public continueGame(): void {
     this.isGameStarted = true;
     this.isGameFinished = false;
+    this.currentQuestion = this.questionSheet[this.currentIndex];
+
+    setTimeout(() => {
+      this.carousel.to(this.currentIndex);
+    });
+
   }
 
   seconds = 3;

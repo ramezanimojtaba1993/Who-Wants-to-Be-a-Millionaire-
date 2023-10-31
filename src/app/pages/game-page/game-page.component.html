@@ -2,7 +2,24 @@
   <div class="container h-100">
     <div class="row d-flex justify-content-center align-items-center h-100">
 
-      <div class="col-xl-9" *ngIf='!isGameStarted'>
+      <div class="col-xl-9" *ngIf='hasGameUnFinished && !isGameStarted'>
+
+        <h1 class="text-white mb-4">You haven't finished your previous game!</h1>
+        <h5 class="text-white mb-4">Are you ready to continue?</h5>
+
+        <div class="card rounded-4">
+          <div class="card-body p-0">
+
+            <div class="p-4 text-center">
+              <button type="submit" class="btn btn-primary btn-md" data-test="start-btn" (click)="continueGame()">Yes, let's get continued!</button>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <div class="col-xl-9" *ngIf='!isGameStarted && !hasGameUnFinished'>
 
         <h1 class="text-white mb-4">Are you ready to start?</h1>
 
@@ -20,18 +37,13 @@
 
       <div class="col-xl-9" *ngIf='isGameFinished'>
 
-        <h1 class="text-white mb-4">Are you ready to start again?</h1>
 
         <div class="card rounded-4">
-          <div class="card-body p-0">
+          <div class="card-body">
 
-            <div class="text-center pt-4">
+            <div class="text-center p-8">
               <h6 data-testid="done">Done!</h6>
               <h6><span>achievedScore: </span> <span class="correct">{{ achievedScore }}</span></h6>
-            </div>
-
-            <div class="p-4 text-center">
-              <button type="submit" class="btn btn-primary btn-md" data-test="start-btn" (click)="startGameAgain()">Yes, let's get started again!</button>
             </div>
 
           </div>
@@ -46,7 +58,6 @@
         <div class="card rounded-4">
           <div class="card-body p-0">
 
-            <div *ngIf="!isGameFinished">
               <div class="p-4">
 
                 <div id="questionCarousel" #carousel class="carousel slide" data-bs-touch="false">
@@ -62,7 +73,7 @@
                 <span class="d-block text-danger" data-testid="atLeastOneAnswerMessage" *ngIf="message">{{ message }}</span>
               </div>
 
-              <h6 class="d-block text-center invisible-progress" [ngClass]="{'visible-progress': timer > 0}">preparing next question...</h6>
+              <h6 class="d-block text-center invisible-progress" [ngClass]="{'visible-progress': timer > 0}">preparing for next question...</h6>
 
               <div class="d-flex flex-row justify-content-center invisible-progress mb-4" [ngClass]="{'visible-progress': timer > 0}">
                 <div class="progress mb-3" style="width: 30%">
@@ -83,10 +94,10 @@
                 <button
                   class="btn btn-outline-secondary control-next ms-1"
                   type="button"
-                  [disabled]="currentQuestion.loading || currentIndex > questionSheet.length - 1"
+                  [disabled]="currentQuestion?.loading || currentIndex > questionSheet.length - 1"
                   (click)="next()"
                 >
-                  <span *ngIf="currentQuestion.loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                  <span *ngIf="currentQuestion?.loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                   Next
                 </button>
               </div>
@@ -98,9 +109,6 @@
               <div class="d-flex flex-row justify-content-end pb-3">
                 <span class="rounded-end-5 text-bg-secondary text-center px-2 py-1 rounded-pill">{{ currentIndex + 1 }} / {{ questionSheet.length }}</span>
               </div>
-
-            </div>
-
 
 
           </div>

@@ -19,3 +19,10 @@ export interface QuestionSheet {
   loading: boolean;
   isSeen: boolean;
 }
+
+export interface GameStates {
+  id: number;
+  userId: number;
+  currentQuestionId: number;
+  questionSheet: QuestionSheet[]
+}

@@ -26,7 +26,7 @@ export class LoginComponent {
 			},
 			next: (user: any) => {
         if (user && user.length) {
-					this.storageService.setItem('userinfo', { email });
+          this.storageService.setItem('userinfo', { email, userId: user[0].id });
 					this.storageService.setItem('token', btoa(email));
 
 					this.router.navigate(['game-page']);
@@ -36,4 +36,12 @@ export class LoginComponent {
 			},
 		});
 	}
+
+  public copyCredential(field: 'email' | 'password') {
+    const credential = {
+      email: 'admin@gmail.com',
+      password: 'admin',
+    };
+    navigator.clipboard.writeText(credential[field]);
+  }
 }

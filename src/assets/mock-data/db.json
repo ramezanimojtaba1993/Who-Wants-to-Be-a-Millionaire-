@@ -1,0 +1,159 @@
+{
+  "questions": [
+    {
+      "id": 1,
+      "questionTitle": "1) What does HTML stand for?",
+      "answers": [
+        {
+          "id": 1,
+          "title": "HyperText Multi-Language"
+        },
+        {
+          "id": 2,
+          "title": "HyperText Markup Language"
+        },
+        {
+          "id": 3,
+          "title": "HighTech Markup Language"
+        },
+        {
+          "id": 4,
+          "title": "HyperText Modeling Language"
+        }
+      ],
+      "score": 5
+    },
+    {
+      "id": 2,
+      "questionTitle": "2) Which programming language is known for its use in frontend development?",
+      "answers": [
+        {
+          "id": 1,
+          "title": "Ruby"
+        },
+        {
+          "id": 2,
+          "title": "Python"
+        },
+        {
+          "id": 3,
+          "title": "JavaScript"
+        },
+        {
+          "id": 4,
+          "title": "C++"
+        }
+      ],
+      "score": 10
+    },
+    {
+      "id": 3,
+      "questionTitle": "3) Which of the following are popular version control systems used in software development?",
+      "answers": [
+        {
+          "id": 1,
+          "title": "Subversion"
+        },
+        {
+          "id": 2,
+          "title": "Git"
+        },
+        {
+          "id": 3,
+          "title": "RabbitMQ"
+        },
+        {
+          "id": 4,
+          "title": "Kafka"
+        }
+      ],
+      "score": 20
+    },
+    {
+      "id": 4,
+      "questionTitle": "4) What is the primary function of a CSS file in web development?",
+      "answers": [
+        {
+          "id": 1,
+          "title": "Controlling database operations"
+        },
+        {
+          "id": 2,
+          "title": "Handling user authentication"
+        },
+        {
+          "id": 3,
+          "title": "Managing server configurations"
+        },
+        {
+          "id": 4,
+          "title": "Styling and formatting web content"
+        }
+      ],
+      "score": 15
+    },
+    {
+      "id": 5,
+      "questionTitle": "5) In software development, what does the acronym 'API' stand for?",
+      "answers": [
+        {
+          "id": 1,
+          "title": "Application Program Interface"
+        },
+        {
+          "id": 2,
+          "title": "All-Purpose Interface"
+        },
+        {
+          "id": 3,
+          "title": "Application Programming Interface"
+        },
+        {
+          "id": 4,
+          "title": "Application Program Integration"
+        }
+      ],
+      "score": 15
+    }
+  ],
+  "answers": [
+    {
+      "questionId": 1,
+      "correctAnswersId": [
+        2
+      ]
+    },
+    {
+      "questionId": 2,
+      "correctAnswersId": [
+        3
+      ]
+    },
+    {
+      "questionId": 3,
+      "correctAnswersId": [
+        1,
+        2
+      ]
+    },
+    {
+      "questionId": 4,
+      "correctAnswersId": [
+        4
+      ]
+    },
+    {
+      "questionId": 5,
+      "correctAnswersId": [
+        3
+      ]
+    }
+  ],
+  "users": [
+    {
+      "email": "admin@gmail.com",
+      "password": "admin",
+      "id": 1
+    }
+  ]
+}

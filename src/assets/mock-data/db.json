@@ -149,5 +149,11 @@
       ]
     }
   ],
-  "users": []
+  "users": [
+    {
+      "email": "admin@gmail.com",
+      "password": "admin",
+      "id": 1
+    }
+  ]
 }

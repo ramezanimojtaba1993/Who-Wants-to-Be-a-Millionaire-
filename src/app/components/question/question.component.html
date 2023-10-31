@@ -1,0 +1,19 @@
+<section class="question-box w-100 p-2">
+	<div class="question rounded-3 p-3 mb-5">
+		<h1 class="h4 lh-base text-center">{{ question.questionTitle }}</h1>
+		<h6 class="lh-base text-center">score: {{ question.score }}</h6>
+	</div>
+	<div class="answer-list d-flex flex-row flex-wrap">
+		<div class="w-50 p-2" *ngFor="let answer of question.answers">
+			<button
+				type="button"
+				class="btn w-100 p-3"
+        [disabled]="answer.disabled"
+				(click)="setResult(answer.id, question.id)"
+				[ngClass]="getAnswerBgColor(answer)"
+			>
+				{{ answer.title }}
+			</button>
+		</div>
+	</div>
+</section>

@@ -1,0 +1,11 @@
+:host {
+	width: 100%;
+
+  .invisible-progress {
+    visibility: hidden;
+  }
+
+  .visible-progress {
+    visibility: visible !important;
+  }
+}

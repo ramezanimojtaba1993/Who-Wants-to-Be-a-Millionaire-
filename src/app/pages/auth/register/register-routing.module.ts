@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-// import { CanActivateTeam } from '../../../app.guard';
+// import { CanGoToAppGuard } from '../../../app.guard';
 import { RegisterComponent } from './register.component';
 
 const routes: Routes = [
-	{ path: '**', component: RegisterComponent/*, canActivate: [CanActivateTeam]*/ },
+	{ path: '**', component: RegisterComponent/*, canActivate: [CanGoToAppGuard]*/ },
 ];
 
 @NgModule({

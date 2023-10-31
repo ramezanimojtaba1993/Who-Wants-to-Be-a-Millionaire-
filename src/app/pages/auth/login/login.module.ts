@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { CanActivateTeam } from '../../../app.guard';
+import { CanGoToLoginGuard } from "../../../can-go-to-login.guard";
 import { LoginComponent } from './login.component';
 import { LoginRoutingModule } from "./login-routing.module";
 
@@ -13,7 +13,7 @@ import { LoginRoutingModule } from "./login-routing.module";
     FormsModule,
     ReactiveFormsModule
   ],
-  providers: [CanActivateTeam],
+  providers: [CanGoToLoginGuard],
 })
 
 export class LoginModule { }

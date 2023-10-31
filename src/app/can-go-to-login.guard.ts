@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/internal/Observable';
 import { StorageService } from './services/storage.service';
 
 @Injectable()
-export class CanActivateTeam implements CanActivate {
+export class CanGoToLoginGuard implements CanActivate {
 	constructor(private router: Router, private storageService: StorageService) {}
 
 	canActivate(
@@ -14,8 +14,8 @@ export class CanActivateTeam implements CanActivate {
 		return new Observable<boolean>((observer) => {
 			const token = this.storageService.getItem('token');
 
-			if (!token) {
-				this.router.navigate(['login']);
+			if (token) {
+				this.router.navigate(['game-page']);
 			}
 
 			observer.next(true);

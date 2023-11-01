@@ -171,9 +171,11 @@ export class GamePageComponent implements OnInit {
     await this.gameService.createGameStates(body);
   }
 
-  finishGame() {
+  async finishGame() {
+    const { userId } = this.userInfo;
     this.isGameFinished = true;
     this.resetVariables();
+    await this.gameService.deleteGameState(userId);
   }
 
   resetVariables() {

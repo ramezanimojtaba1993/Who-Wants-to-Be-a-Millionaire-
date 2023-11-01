@@ -9,7 +9,7 @@ import { Router } from "@angular/router";
 	providedIn: 'root',
 })
 export class AuthService {
-	private baseUrl = 'http://185.226.118.199:8000/users';
+	private baseUrl = 'http://localhost:8000/users';
 
 	constructor(private router: Router, private http: HttpClient, private storageService: StorageService) {}
 

@@ -7,7 +7,7 @@ import { GameStates, QuestionSheet } from '../../model/question.model';
   providedIn: 'root',
 })
 export class GameService {
-  private baseUrl = 'http://185.226.118.199:8000';
+  private baseUrl = 'http://localhost:8000';
 
   constructor(private http: HttpClient) {}
 

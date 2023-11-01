@@ -9,16 +9,16 @@ import { Router } from "@angular/router";
 	providedIn: 'root',
 })
 export class AuthService {
-	private baseUrl = 'http://localhost:8000/users';
+	private baseUrl = 'http://185.226.118.199:8000/users';
 
 	constructor(private router: Router, private http: HttpClient, private storageService: StorageService) {}
 
 	register(user: Register) {
-		return this.http.post<any>(this.baseUrl, user);
+		return this.http.post<any>('http://185.226.118.199:8000/users', user);
 	}
 
   login({ email, password }: Login): Observable<Login> {
-    return this.http.get<any>(`${this.baseUrl}?password=${password}&email=${email}`);
+    return this.http.get<any>(`http://localhost:8000/users?password=${password}&email=${email}`);
   }
 
   logout(): void {

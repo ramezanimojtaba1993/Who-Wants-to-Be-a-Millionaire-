@@ -7,13 +7,13 @@ import { GameStates, QuestionSheet } from '../../model/question.model';
   providedIn: 'root',
 })
 export class GameService {
-  private baseUrl = 'http://localhost:8000/questionsSheet';
+  private baseUrl = 'http://185.226.118.199:8000';
 
   constructor(private http: HttpClient) {}
 
   getQuestionsSheet<T, U>(): Promise<any> {
     return new Promise<U>((resolve, reject) => {
-      this.http.get<any>(this.baseUrl)
+      this.http.get<any>(`${this.baseUrl}/questionsSheet`)
         .subscribe({
           next: (v: any) => resolve(v),
           error: (e: any) => reject(e),
@@ -24,7 +24,7 @@ export class GameService {
 
   createGameStates<T, U>(body: GameStates): Promise<any> {
     return new Promise<U>((resolve, reject) => {
-      this.http.post<any>('http://localhost:8000/gameStates', body)
+      this.http.post<any>(`${this.baseUrl}/gameStates`, body)
         .subscribe({
           next: (v: any) => resolve(v),
           error: (e: any) => reject(e),
@@ -34,12 +34,12 @@ export class GameService {
   }
 
   get(id: string): Observable<QuestionSheet> {
-    return this.http.get<any>(this.baseUrl + '/' + id);
+    return this.http.get<any>(`${this.baseUrl}/${id}`);
   }
 
   public getGameState<T, U>(userId: number): Promise<U> {
     return new Promise<U>((resolve, reject) => {
-      this.http.get<U>('http://localhost:8000/gameStates?userId='+ userId)
+      this.http.get<U>(`${this.baseUrl}/gameStates?userId=${userId}`)
         .subscribe({
           next: (v: any) => resolve(v[0]),
           error: (e: any) => reject(e),
@@ -50,7 +50,7 @@ export class GameService {
 
   public getCorrectAnswer<T, U>(questionId: number): Promise<U> {
     return new Promise<U>((resolve, reject) => {
-      this.http.get<U>('http://localhost:8000/answers?questionId=' + questionId)
+      this.http.get<U>(`${this.baseUrl}/answers?questionId=${questionId}`)
         .subscribe({
           next: (v: any) => resolve(v[0]),
           error: (e: any) => reject(e),
@@ -61,24 +61,12 @@ export class GameService {
 
   public updateGameStates<T, U>(userId: number, body: GameStates): Promise<U> {
     return new Promise<U>((resolve, reject) => {
-      this.http.put<any>('http://localhost:8000/gameStates/' + userId, body)
+      this.http.put<any>(`${this.baseUrl}/gameStates/${userId}`, body)
         .subscribe({
           next: (v: any) => resolve(v[0]),
           error: (e: any) => reject(e),
           complete: () => {},
         });
     });
-  }
-
-  create(question: QuestionSheet) {
-    return this.http.post<any>(this.baseUrl, question);
-  }
-
-  update(id: string, question: QuestionSheet): Observable<QuestionSheet> {
-    return this.http.put<any>(this.baseUrl + '/' + id, question);
-  }
-
-  delete(id: string) {
-    return this.http.delete<any>(this.baseUrl + '/' + id);
   }
 }

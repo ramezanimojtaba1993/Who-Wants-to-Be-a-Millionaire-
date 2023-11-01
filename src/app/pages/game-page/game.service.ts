@@ -7,7 +7,7 @@ import { GameStates, QuestionSheet } from '../../model/question.model';
   providedIn: 'root',
 })
 export class GameService {
-  private baseUrl = 'http://localhost:8000';
+  private baseUrl = 'https://jsonserver.mitra-english.ir';
 
   constructor(private http: HttpClient) {}
 

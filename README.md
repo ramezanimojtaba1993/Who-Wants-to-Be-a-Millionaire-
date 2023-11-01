@@ -1,27 +1,68 @@
-# NgMilionaire
+# "Who Wants to Be a Millionaire?" Game
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.1.4.
+## Overview
 
-## Development server
+This is a test task for an Angular developer to create a game similar to "Who Wants to Be a Millionaire?" Players will be asked 5 questions selected from the backend, with no question being repeated during a single game. Each question may have more than one correct answer, and the player's score will depend on their ability to answer questions correctly. This game has the following features:
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+- Each question is assigned a certain number of points based on its complexity, with point values ranging from 5 to 20.
+- The player's score is determined by the number of points they earn by answering questions correctly.
+- Points are divided among the correct answers for each question.
+- If a player selects an incorrect answer, it negates one correct answer they have chosen.
+- The correct answer(s) will be displayed to the player before moving on to the next question.
+- At the end of the game, the player's score will be displayed.
 
-## Code scaffolding
+To play the game, players must first create an account with a unique email and password. Only authorized users will be able to access the game.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Requirements
 
-## Build
+- Node.js (version >= 19.0)
+- npm (version >= 9.0)
+- Angular (version 16.0.0)
+- Backend: You can use JSON-server, Firebase, or any third-party provider of your preference as the backend for this game.
+- test: install playwright and install supported browsers with this command:
+- > npx playwright install
+  
+## Getting Started
+To get started with this project, follow these steps:
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+1. Clone the repository to your local machine:
+> git clone https://github.com/ramezanimojtaba1993/ngMilionaire.git 
+2. Navigate to the project directory
+> cd who-wants-to-be-a-millionaire
+3. Install the required dependencies:
+> npm install
+4. Start the development server:
+> ng serve
+5. Start json server for mock data on another terminal:
+> npm run server
 
-## Running unit tests
+The app will be available at `http://localhost:4200/`
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## App Structure
+Here is the structure of the app, which serves as generally accepted guidelines and patterns for building scalable apps.
 
-## Running end-to-end tests
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+```
+.
+├── e2e-playwright                # all test files for UI test with playwright
+│   ├── login.spec.ts  
+│   ├── login-and-answer-question-correctly.spec.ts
+│   ├── redirect-login.spec.ts  
+│   ├── select-atLeast-one-answer.spec.ts 
+│   └── register.spec.ts           
+├── src                           # App source code
+│   ├── app                       
+│   │   ├── components           
+│   │   ├── models             
+│   │   ├── services           
+│   │   └── pages            
+│   ├── assets                    # Express server static path and Webpack bundles output
+│   ├── favicon.ico               # App favicon
+│   ├── index.html          
+│   ├── main.ts                    
+│   └── style.scss                
+└── playwright.config.ts          # playwright configurations
+```
 
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+# Support
+If you have any questions or need assistance, please reach out to me at `ramezanimojtaba1993@gmail.com`

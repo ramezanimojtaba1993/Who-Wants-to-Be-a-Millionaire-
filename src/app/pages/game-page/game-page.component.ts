@@ -2,6 +2,8 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { GameService } from './game.service';
 import { Answer, GameStates, QuestionSheet } from 'src/app/model/question.model';
 import { StorageService } from 'src/app/services/storage.service';
+import { AuthService } from 'src/app/pages/auth/auth.service';
+import { UserInfo } from "../../model/User.model";
 
 declare const bootstrap: any;
 @Component({
@@ -10,7 +12,7 @@ declare const bootstrap: any;
 	styleUrls: ['./game-page.component.scss'],
 })
 export class GamePageComponent implements OnInit {
-	@ViewChild('carousel') carouselElm: ElementRef;
+  @ViewChild('carousel') carouselElm: ElementRef;
 
 	private _carousel: any = null;
 	private get carousel(): any {
@@ -18,30 +20,35 @@ export class GamePageComponent implements OnInit {
 		return this._carousel;
 	}
 
+  isLoggedIn: boolean;
+  userInfo: UserInfo;
   isGameStarted = false;
   isGameFinished = false;
   hasGameUnFinished = false;
 
   questionSheet: QuestionSheet[] = [];
-
 	currentQuestion: QuestionSheet;
+
   currentIndex: number = 0;
 	message: string;
   achievedScore = 0;
 
-  constructor(private gameService: GameService, private storageService: StorageService) {}
+  constructor(private gameService: GameService, private storageService: StorageService, private authService: AuthService) {}
 
   ngOnInit() {
+    this.isLoggedIn = this.authService.isLoggedIn();
+    this.userInfo = this.storageService.getItem('userinfo');
     this.getGameState();
   }
 
   async getGameState() {
-    const { userId } = this.storageService.getItem('userinfo');
+    const { userId } = this.userInfo;
     const response: GameStates = await this.gameService.getGameState(userId);
 
     if (response) {
-      this.questionSheet = response.questionSheet;
-      this.currentIndex = response.currentQuestionId;
+      const { questionSheet, currentQuestionId } = response;
+      this.questionSheet = questionSheet;
+      this.currentIndex = currentQuestionId;
       this.hasGameUnFinished = true;
     } else {
       this.initializeGame();
@@ -51,8 +58,6 @@ export class GamePageComponent implements OnInit {
 
 	async next() {
 		if (this.isAllowedToNext()) {
-      // این مدت پایینیا رو دگه کال نکن باگ خیز میشه چون خود شیت دیزییبل و کلیک و اینا رو داره باس
-      // تشخیض بدی اگه کش بو اینا کال نشه
       this.currentQuestion.loading = true;
       await this.calcAchievedScore(this.currentQuestion.id);
       this.currentQuestion.loading = false;
@@ -61,7 +66,11 @@ export class GamePageComponent implements OnInit {
       const goNext = async () => {
         this.carousel.next();
         this.currentIndex++;
-        await this.updateGameStates();
+        if (this.currentIndex === 1) {
+          await this.createGameStates();
+        } else {
+          await this.updateGameStates();
+        }
         await this.setCurrentQuestion();
       }
 
@@ -129,16 +138,6 @@ export class GamePageComponent implements OnInit {
     }
 
     this.setCurrentQuestion();
-
-    const { userId } = this.storageService.getItem('userinfo');
-    const body: GameStates = {
-      id: userId,
-      userId,
-      currentQuestionId: this.currentQuestion.id,
-      questionSheet: questionSheet
-    }
-
-    await this.gameService.createGameStates(body);
   }
 
   async setCurrentQuestion() {
@@ -150,7 +149,7 @@ export class GamePageComponent implements OnInit {
   }
 
   async updateGameStates() {
-    const { userId } = this.storageService.getItem('userinfo');
+    const { userId } = this.userInfo;
     const body: GameStates = {
       id: userId,
       userId,
@@ -158,6 +157,18 @@ export class GamePageComponent implements OnInit {
       questionSheet: this.questionSheet
     }
     await this.gameService.updateGameStates(userId, body);
+  }
+
+  async createGameStates() {
+    const { userId } = this.userInfo;
+    const body: GameStates = {
+      id: userId,
+      userId,
+      currentQuestionId: this.currentQuestion.id,
+      questionSheet: this.questionSheet
+    }
+
+    await this.gameService.createGameStates(body);
   }
 
   finishGame() {
@@ -201,9 +212,8 @@ export class GamePageComponent implements OnInit {
 		this.message = null;
 	}
 
-  public startGame(): void {
+  public async startGame() {
     this.isGameStarted = true;
-    // this.isGameFinished = false;
   }
 
   public continueGame(): void {
@@ -232,6 +242,10 @@ export class GamePageComponent implements OnInit {
 
   getTimeRemainingPercent(): string {
     return `width: ${(this.seconds - this.timer) * 34}%`;
+  }
+
+  logout() {
+    this.authService.logout();
   }
 
 }

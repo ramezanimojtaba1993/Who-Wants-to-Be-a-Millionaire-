@@ -154,6 +154,8 @@
   ],
   "users": [
     {
+      "firstName": "Mojtaba",
+      "lastName": "Ramezani",
       "email": "admin@gmail.com",
       "password": "admin",
       "id": 1

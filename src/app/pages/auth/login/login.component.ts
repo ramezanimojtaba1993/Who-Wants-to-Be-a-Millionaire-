@@ -26,7 +26,7 @@ export class LoginComponent {
 			},
 			next: (user: any) => {
         if (user && user.length) {
-          this.storageService.setItem('userinfo', { email, userId: user[0].id });
+          this.storageService.setItem('userinfo', { email, userId: user[0].id, firstName: user[0].firstName, lastName: user[0].lastName });
 					this.storageService.setItem('token', btoa(email));
 
 					this.router.navigate(['game-page']);

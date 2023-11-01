@@ -18,7 +18,7 @@ export class AuthService {
 	}
 
   login({ email, password }: Login): Observable<Login> {
-    return this.http.get<any>(`http://localhost:8000/users?password=${password}&email=${email}`);
+    return this.http.get<any>(`http://json-server:3000/users?password=${password}&email=${email}`);
   }
 
   logout(): void {
